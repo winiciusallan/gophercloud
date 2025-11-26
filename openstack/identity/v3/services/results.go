@@ -50,6 +50,12 @@ type Service struct {
 	// ID is the unique ID of the service.
 	ID string `json:"id"`
 
+	// Name is the name of the service.
+	Name string `json:"name"`
+
+	// Description is the description of the service.
+	Description string `json:"description"`
+
 	// Type is the type of the service.
 	Type string `json:"type"`
 
@@ -75,8 +81,9 @@ func (r *Service) UnmarshalJSON(b []byte) error {
 	}
 	*r = Service(s.tmp)
 
-	// Collect other fields and bundle them into Extra
-	// but only if a field titled "extra" wasn't sent.
+	// If the field "extra" wasn't sent, we must populate unsupported fields
+	// (name and description) within extra to work as the previous behavior.
+	// for more information, see https://github.com/gophercloud/gophercloud/issues/3561
 	if s.Extra != nil {
 		r.Extra = s.Extra
 	} else {
@@ -85,8 +92,18 @@ func (r *Service) UnmarshalJSON(b []byte) error {
 		if err != nil {
 			return err
 		}
+
+		r.Extra = make(map[string]any)
 		if resultMap, ok := result.(map[string]any); ok {
 			r.Extra = gophercloud.RemainingKeys(Service{}, resultMap)
+
+			if description, ok := resultMap["description"]; ok {
+				r.Extra["description"] = description
+			}
+
+			if name, ok := resultMap["name"]; ok {
+				r.Extra["name"] = name
+			}
 		}
 	}
 
