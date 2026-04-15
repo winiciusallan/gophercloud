@@ -123,8 +123,8 @@ func CreateSecurityGroupRule(t *testing.T, client *gophercloud.ServiceClient, se
 		Direction:    "ingress",
 		EtherType:    "IPv4",
 		SecGroupID:   secGroupID,
-		PortRangeMin: fromPort,
-		PortRangeMax: toPort,
+		PortRangeMin: th.ToPtr(fromPort),
+		PortRangeMax: th.ToPtr(toPort),
 		Protocol:     rules.ProtocolTCP,
 	}
 
@@ -156,8 +156,8 @@ func CreateSecurityGroupRulesBulk(t *testing.T, client *gophercloud.ServiceClien
 			Direction:    "ingress",
 			EtherType:    "IPv4",
 			SecGroupID:   secGroupID,
-			PortRangeMin: fromPort,
-			PortRangeMax: toPort,
+			PortRangeMin: th.ToPtr(fromPort),
+			PortRangeMax: th.ToPtr(toPort),
 			Protocol:     rules.ProtocolTCP,
 		}
 	}

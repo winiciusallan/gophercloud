@@ -446,3 +446,7 @@ func AssertIntGreaterOrEqual(t *testing.T, v1 int, v2 int) {
 		logFatal(t, fmt.Sprintf("The first value \"%v\" is lesser than the second value \"%v\"", v1, v2))
 	}
 }
+
+func ToPtr[T any](v T) *T {
+	return &v
+}
